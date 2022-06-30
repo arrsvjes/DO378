@@ -5,7 +5,12 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
 
+import org.acme.rest.json.Expense.PaymentMethod;
+
+@ApplicationScoped
 public class ExpenseService {
     private Set<Expense> expenses = Collections.newSetFromMap(Collections.synchronizedMap(new HashMap<>()));
 
@@ -29,5 +34,10 @@ public class ExpenseService {
 
     public boolean exists(UUID uuid) {
         return expenses.stream().anyMatch(exp -> exp.getUuid().equals(uuid));
+    }
+    @PostConstruct
+    void initData() { 
+        expenses.add(new Expense("Groceries", PaymentMethod.CASH, "150.50"));
+        expenses.add(new Expense("Civilization VI", PaymentMethod.DEBIT_CARD,"25.00"));
     }
 }
